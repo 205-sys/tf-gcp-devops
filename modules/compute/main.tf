@@ -17,7 +17,7 @@ resource "google_compute_instance" "vm" {
     systemctl start nginx
     systemctl enable nginx
 
-    echo "<h1>Terraform Deployed Web Server 🚀</h1>" > /var/www/html/index.html
+    echo "<h1>Terraform Deployed Web Server</h1>" > /var/www/html/index.html
   EOF
 
   network_interface {
