@@ -21,3 +21,17 @@ resource "google_compute_firewall" "ssh" {
 
   source_ranges = ["0.0.0.0/0"]
 }
+
+# Allow HTTP traffic
+resource "google_compute_firewall" "http" {
+  name    = "${var.vpc_name}-allow-http"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
+}

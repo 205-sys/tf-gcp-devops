@@ -9,11 +9,22 @@ resource "google_compute_instance" "vm" {
     }
   }
 
+  # 🔥 Startup script installs NGINX automatically
+  metadata_startup_script = <<-EOF
+    #!/bin/bash
+    apt update
+    apt install -y nginx
+    systemctl start nginx
+    systemctl enable nginx
+
+    echo "<h1>Terraform Deployed Web Server 🚀</h1>" > /var/www/html/index.html
+  EOF
+
   network_interface {
     subnetwork = var.subnet_id
 
     access_config {}
   }
 
-  tags = ["ssh"]
+  tags = ["http-server"]
 }

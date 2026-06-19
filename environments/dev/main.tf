@@ -12,9 +12,10 @@ module "network" {
   region      = var.region
 }
 
+
 module "compute" {
   source    = "../../modules/compute"
-  vm_name   = "dev-vm"
+  vm_name   = "dev-web-vm"
   zone      = var.zone
   subnet_id = module.network.subnet_id
 }
