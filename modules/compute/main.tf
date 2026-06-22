@@ -36,7 +36,7 @@ resource "google_compute_instance_group_manager" "group" {
     instance_template = google_compute_instance_template.template.id
   }
 
-  target_size = 2
+  target_size = 3
 }
 
 # Named port (required for load balancer)
