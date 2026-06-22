@@ -1,28 +1,49 @@
-resource "google_compute_instance" "vm" {
-  name         = var.vm_name
+# Instance Template
+resource "google_compute_instance_template" "template" {
+  name_prefix  = "web-template-"
   machine_type = "e2-micro"
-  zone         = var.zone
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
+  disk {
+    source_image = "debian-cloud/debian-11"
+    auto_delete  = true
+    boot         = true
   }
 
-  # 🔥 Startup script installs NGINX automatically
+  network_interface {
+    subnetwork = var.subnet_id
+    access_config {}
+  }
+
   metadata_startup_script = <<-EOF
     #!/bin/bash
     apt update
     apt install -y nginx
     systemctl start nginx
     systemctl enable nginx
-    EOF
-
-  network_interface {
-    subnetwork = var.subnet_id
-
-    access_config {}
-  }
+    echo "<h1>Load Balanced Web Server 🚀</h1>" > /var/www/html/index.html
+  EOF
 
   tags = ["http-server"]
+}
+
+# Managed Instance Group
+resource "google_compute_instance_group_manager" "group" {
+  name               = "web-group"
+  base_instance_name = "web"
+  zone               = var.zone
+
+  version {
+    instance_template = google_compute_instance_template.template.id
+  }
+
+  target_size = 2
+}
+
+# Named port (required for load balancer)
+resource "google_compute_instance_group_named_port" "http" {
+  group = google_compute_instance_group_manager.group.name
+  zone  = var.zone
+
+  name = "http"
+  port = 80
 }

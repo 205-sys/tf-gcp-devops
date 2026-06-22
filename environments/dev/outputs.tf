@@ -1,3 +1,3 @@
-output "web_ip" {
-  value = module.compute.vm_ip
+output "load_balancer_ip" {
+  value = google_compute_global_address.web_ip.address
 }
