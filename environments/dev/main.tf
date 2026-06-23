@@ -39,6 +39,11 @@ resource "google_compute_health_check" "http" {
 resource "google_compute_backend_service" "web" {
   name                  = "web-backend"
   load_balancing_scheme = "EXTERNAL"
+
+
+
+
+  
   protocol              = "HTTP"
 
   backend {
