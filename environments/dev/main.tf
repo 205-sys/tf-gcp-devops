@@ -38,12 +38,7 @@ resource "google_compute_health_check" "http" {
 # Backend service
 resource "google_compute_backend_service" "web" {
   name                  = "web-backend"
-  load_balancing_scheme = "EXTERNAL"
-
-
-
-
-  
+  load_balancing_scheme = "EXTERNAL"  
   protocol              = "HTTP"
 
   backend {
@@ -75,5 +70,5 @@ resource "google_compute_global_forwarding_rule" "web" {
   name       = "web-forwarding-rule"
   target     = google_compute_target_http_proxy.web.id
   port_range = "80"
-  ip_address = google_compute_global_address.web_ip.address
+  ip_address = google_compute_globals_address.web_ip.address
 }
