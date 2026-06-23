@@ -1,7 +1,12 @@
 name: Terraform Destroy
 
 on:
-  workflow_dispatch:   # ✅ Creates button
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'yes' to destroy"
+        required: true
+
 
 jobs:
   destroy:
